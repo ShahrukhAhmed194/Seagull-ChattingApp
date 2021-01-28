@@ -10,7 +10,6 @@ $con = mysqli_connect("localhost", "root", "", "seagull");
              $user_profile = $row_user['user_profile'];
              $login = $row_user['log_in'];
 
-
              echo "
              <li>
                 <div class='chat-left-img'>
@@ -18,10 +17,12 @@ $con = mysqli_connect("localhost", "root", "", "seagull");
                 </div>
                 <div class='chat-left-details'>
                     <p><a href='home.php?user_name=$user_name'>$user_name</a></p>";
-             if ($login == 'Online') {
-                 echo "<span><i style='color: red'>#</i>Online</span>";
-             } else {
-                 echo "<span<i style='color: green'>#</i>Offline</span>";
+
+             if($login == 'online'){
+                 echo "<span><i class=\"fas fa-circle\"></i>Online</span>";
+             }
+             else{
+                 echo "<span><i class=\"fas fa-circle-notch\"></i>Offline</span>";
 
              }"
 

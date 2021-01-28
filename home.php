@@ -3,6 +3,7 @@
 session_start();
 include("include/connection.php");
 
+
 if(!isset($_SESSION['user_email'])){
     header("Location: signin.php");
 }else{
@@ -31,7 +32,7 @@ if(!isset($_SESSION['user_email'])){
    <div class="container main-section">
        <div class="row">
            <div class="col-md-3 col-sm-3 col-xs-12 left-sidebar">
-               <div class="input-group searchbox">
+               <div class="input-group searchbox"> 
                    <div class="input-group-btn">
                        <center><a href="include/find_friends.php"><button class="btn btn-primary search-icon" name="search_user" type="submit">Add New User</button></a></center>
                    </div>
@@ -43,9 +44,11 @@ if(!isset($_SESSION['user_email'])){
                </div>
            </div>
            <div class="col-md-9 col-sm-9 col-xs-12 right-sidebar">
+
                <div class="row">
 <!--                   Getting the logged in user info -->
                    <?php
+                   global $con;
                    $user = $_SESSION['user_email'];
                    $get_user = "select * from users where user_email='$user'";
                    $run_user = mysqli_query($con, $get_user);
@@ -57,10 +60,11 @@ if(!isset($_SESSION['user_email'])){
 
 <!--                   Info according to user click and need-->
                    <?php
+
                    if(isset($_GET['user_name'])){
 
-                       global $con;
                        $get_username = $_GET['user_name'];
+
                        $get_user = "select * from users where user_name='$get_username'";
 
                        $run_user = mysqli_query($con, $get_user);
@@ -70,6 +74,7 @@ if(!isset($_SESSION['user_email'])){
                        $username = $row_user['user_name'];
                        $user_profile_image = $row_user['user_profile'];
                    }
+
                    $total_messages = "select * from users_chat where (sender_username = '$user_name' AND receiver_username='$username') OR (receiver_username='$user_name' AND sender_username='$username')";
                    $run_messages = mysqli_query($con, $total_messages);
                    $total = mysqli_num_rows($run_messages);
@@ -77,7 +82,7 @@ if(!isset($_SESSION['user_email'])){
 
                    <div class="col-md-12 right-header">
                        <div class="right-header-img">
-                           <img src=<?php echo"$user_profile_image";?>>
+                           <img src="<?php echo $user_profile_image;?>">
                        </div>
                        <div class="right-header-detail">
                            <form method="post">
@@ -98,9 +103,9 @@ if(!isset($_SESSION['user_email'])){
                <div class="row">
                    <div id="scrolling_to_bottom" class="col-md-12 right-header-contentChat">
                    <?php
-                   $update_msg = mysqli_query($con,"UPDATE users_chat SET msg_status='read' WHERE sender_username='$user_name' AND receiver_username='$username'");
+                   $update_msg = mysqli_query($con,"UPDATE users_chat SET msg_status='read' WHERE sender_username='$username' AND receiver_username='$user_name'");
 
-                   $sel_msg = "select * from users_chat where (sender_username = '$user_name' AND receiver_username='$username') OR (receiver_username='$user_name' AND sender_username='$username') ORDER  BY 1 ASC ;";
+                   $sel_msg = "select * from users_chat where (sender_username = '$user_name' AND receiver_username='$username') OR (receiver_username='$user_name' AND sender_username='$username') ORDER  BY 1 ASC ";
                    $run_msg = mysqli_query($con, $sel_msg);
 
                    while($row = mysqli_fetch_array($run_msg)) {
@@ -118,7 +123,7 @@ if(!isset($_SESSION['user_email'])){
                                echo "
                          <li>
                            <div class='rightside-right-chat'>
-                             <span>$username </span><small>$msg_date</small>
+                             <span>$username <small >$msg_date</small></span> <br><br>
                              <p>$msg_content</p>
                            </div>
                          </li>
@@ -130,8 +135,9 @@ if(!isset($_SESSION['user_email'])){
                                echo "
                          <li>
                            <div class='rightside-left-chat'>
-                             <span>$username <small>$msg_date</small></span><br><br>
+                             <span> $user_name <small>$msg_date</small></span> <br><br>
                              <p>$msg_content</p>
+                             <br><br>
                            </div>
                          </li>
                          ";
